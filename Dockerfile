@@ -9,7 +9,10 @@ RUN apt-get update && apt-get install -y \
   neovim \
   git \
   curl \
-  && rm -rf /var/lib/apt/lists/*
+  software-properties-common \
+  && rm -rf /var/lib/apt/lists/* \
+  && apt-get autoremove -y \
+  && apt-get clean
 
 # Install Powerline
 RUN pip install powerline-status
@@ -22,7 +25,8 @@ RUN git clone https://github.com/powerline/fonts.git --depth=1 && \
   rm -rf fonts
 
 # Install ruff and flake8 for Python linting, black for formatting, and isort for import sorting
-RUN pip install ruff flake8 black isort
+RUN pip install ruff ruff-lsp flake8 black && \
+  echo "let g:ruff_command = 'ruff --color=always'" >> /root/.config/nvim/init.vim
 
 # Install vim-plug for Neovim
 RUN curl -fLo "${XDG_DATA_HOME:-/root/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
@@ -39,6 +43,9 @@ RUN apt-get update && apt-get install -y expect && \
   expect install_plugins.exp && \
   rm install_plugins.exp && \
   apt-get remove -y expect && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/github/copilot.vim.git \
+  ~/.config/nvim/pack/github/start/copilot.vim
 
 # Install Neovim plugins using a non-interactive shell
 RUN nvim --headless +PlugInstall +qall
