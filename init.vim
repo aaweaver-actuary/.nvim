@@ -10,6 +10,6 @@ call plug#end()
 
 " NERDTree setup and other configurations
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd VimEnter * if exists(":NERDTree") | NERDTree | endif
 
 " Flake8 integration might require a plugin or manual setup.

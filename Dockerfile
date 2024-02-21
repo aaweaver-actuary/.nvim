@@ -36,7 +36,8 @@ RUN apt-get update && apt-get install -y expect && \
   rm install_plugins.exp && \
   apt-get remove -y expect && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
-# Optional: Install other tools and plugins as needed
+# Install Neovim plugins using a non-interactive shell
+RUN nvim --headless +PlugInstall +qall
 
 # Set the default command to run Neovim
 CMD ["nvim"]
