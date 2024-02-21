@@ -14,11 +14,15 @@ RUN apt-get update && apt-get install -y \
 # Install Powerline
 RUN pip install powerline-status
 
-# Install ruff and flake8 for Python linting
-RUN pip install ruff flake8
+# Install Powerline fonts
+RUN git clone https://github.com/powerline/fonts.git --depth=1 && \
+  cd fonts && \
+  ./install.sh && \
+  cd .. && \
+  rm -rf fonts
 
-# Install Black for Python formatting
-RUN pip install black
+# Install ruff and flake8 for Python linting, black for formatting, and isort for import sorting
+RUN pip install ruff flake8 black isort
 
 # Install vim-plug for Neovim
 RUN curl -fLo "${XDG_DATA_HOME:-/root/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
