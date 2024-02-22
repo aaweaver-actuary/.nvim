@@ -14,13 +14,29 @@ Plug 'github/copilot.vim'
 
 call plug#end()
 
-call glaive#Install()
-
 " NERDTree setup and other configurations
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if exists(":NERDTree") | NERDTree | endif
 
-" Flake8 integration might require a plugin or manual setup.
+" Powerline configuration
+set rtp+=/usr/local/lib/python3.11/site-packages/powerline/bindings/vim/
+" Always show statusline
+set laststatus=2
+" Use 256-color (important for Powerline)
+set t_Co=256
+" Use fancy symbols
+let g:Powerline_symbols = 'fancy'
+" Use the default theme
+let g:Powerline_theme = 'default'
+" Use the default colorscheme
+let g:Powerline_colorscheme = 'default'
+" Use the default separator
+let g:Powerline_separators = 'default'
+" Use the default mode indicator
+let g:Powerline_mode_indicator = 'default'
+
+" Set the path to the Python interpreter from the virtual environment
+let g:python3_host_prog = '/usr/src/app/.venv/bin/python'
 
 set number
 set relativenumber

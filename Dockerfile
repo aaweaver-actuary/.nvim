@@ -10,12 +10,57 @@ RUN apt-get update && apt-get install -y \
   git \
   curl \
   software-properties-common \
+  build-essential \
+  nodejs \
+  python3-pip \
+  python3-venv \
+  python3-dev \
   && rm -rf /var/lib/apt/lists/* \
   && apt-get autoremove -y \
   && apt-get clean
 
-# Install Powerline
-RUN pip install powerline-status
+# Verify that nodejs is installed
+RUN node -v
+
+# Verify that Neovim is installed
+RUN nvim --version
+
+# Set the environment variable for Neovim
+ENV XDG_CONFIG_HOME=/root/.config
+ENV XDG_DATA_HOME=/root/.local/share
+
+# Verify that:
+# 1. python3 is installed
+# 2. python3 is available on the PATH
+# 3. pip is installed
+# 4. pip is available on the PATH
+# 5. python3-venv is installed
+RUN python3 --version
+RUN which python3 
+RUN pip --version 
+RUN which pip 
+RUN python3 -m venv --help 
+
+# Update pip and install global Python packages
+RUN python3 -m pip install --upgrade pip && \
+  python3 -m pip install \
+  pynvim  # Add other packages here if needed globally
+
+
+# Create a virtual environment using python3-venv
+RUN python3 -m venv .venv
+
+# Activate the virtual environment and install Python packages
+RUN . .venv/bin/activate && \ 
+  python3 -m pip install --upgrade \
+  ruff \
+  ruff-lsp \
+  flake8 \
+  black \
+  powerline-status \
+  python-lsp-server \
+  pynvim \
+  isort
 
 # Install Powerline fonts
 RUN git clone https://github.com/powerline/fonts.git --depth=1 && \
@@ -23,10 +68,6 @@ RUN git clone https://github.com/powerline/fonts.git --depth=1 && \
   ./install.sh && \
   cd .. && \
   rm -rf fonts
-
-# Install ruff and flake8 for Python linting, black for formatting, and isort for import sorting
-RUN pip install ruff ruff-lsp flake8 black && \
-  echo "let g:ruff_command = 'ruff --color=always'" >> /root/.config/nvim/init.vim
 
 # Install vim-plug for Neovim
 RUN curl -fLo "${XDG_DATA_HOME:-/root/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
@@ -44,8 +85,10 @@ RUN apt-get update && apt-get install -y expect && \
   rm install_plugins.exp && \
   apt-get remove -y expect && apt-get autoremove -y && rm -rf /var/lib/apt/lists/*
 
+# Install copilot.vim
 RUN git clone https://github.com/github/copilot.vim.git \
-  ~/.config/nvim/pack/github/start/copilot.vim
+  ~/.config/nvim/pack/github/start/copilot.vim && \
+  nvim --headless +PlugInstall +qall
 
 # Install Neovim plugins using a non-interactive shell
 RUN nvim --headless +PlugInstall +qall
