@@ -1,3 +1,4 @@
+require("gitsigns")
 call plug#begin('~/.vim/plugged')
 
 " Install NERDTree
@@ -8,6 +9,7 @@ Plug 'google/vim-maktaba'
 Plug 'google/vim-codefmt'
 Plug 'google/vim-glaive'
 Plug 'github/copilot.vim'
+Plug 'feline-nvim/feline.nvim'
 
 " Install github copilot
 Plug 'github/copilot.vim'
@@ -18,22 +20,8 @@ call plug#end()
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if exists(":NERDTree") | NERDTree | endif
 
-" Powerline configuration
-set rtp+=/usr/local/lib/python3.11/site-packages/powerline/bindings/vim/
 " Always show statusline
 set laststatus=2
-" Use 256-color (important for Powerline)
-set t_Co=256
-" Use fancy symbols
-let g:Powerline_symbols = 'fancy'
-" Use the default theme
-let g:Powerline_theme = 'default'
-" Use the default colorscheme
-let g:Powerline_colorscheme = 'default'
-" Use the default separator
-let g:Powerline_separators = 'default'
-" Use the default mode indicator
-let g:Powerline_mode_indicator = 'default'
 
 " Set the path to the Python interpreter from the virtual environment
 let g:python3_host_prog = '/usr/src/app/.venv/bin/python'
